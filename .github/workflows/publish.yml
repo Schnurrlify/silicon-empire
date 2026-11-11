@@ -1,0 +1,36 @@
+# Veröffentlicht ein Setup als Release.
+# Auslöser: Push eines Branches upload/v<Version>, der die Datei SiliconEmpire-Setup-<Version>.exe enthält.
+# Der Workflow erstellt daraus das Release v<Version> und löscht den Branch danach wieder,
+# damit die grosse Datei nicht im Repo liegen bleibt.
+name: Release veröffentlichen
+
+on:
+  push:
+    branches: ['upload/**']
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Release erstellen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V="${GITHUB_REF_NAME#upload/v}"
+          F="SiliconEmpire-Setup-$V.exe"
+          test -f "$F" || { echo "Datei $F fehlt im Branch."; exit 1; }
+          if gh release view "v$V" >/dev/null 2>&1; then echo "Release v$V existiert schon."; exit 0; fi
+          cp "$F" SiliconEmpire-Setup.exe
+          APK=""; [ -f "SiliconEmpire-Android.apk" ] && APK="SiliconEmpire-Android.apk"
+          printf 'Silicon Empire %s (Beta) für Windows 10 und 11.\n\n**Installieren:** `SiliconEmpire-Setup.exe` herunterladen und ausführen. Zeigt Windows «Der Computer wurde durch Windows geschützt», auf «Weitere Informationen» und dann auf «Trotzdem ausführen» klicken. Spielstände bleiben bei Updates erhalten.\n\nWas neu ist: https://siliconempire.ch/info.html#neu\n' "$V" > notes.md
+          gh release create "v$V" SiliconEmpire-Setup.exe "$F" $APK --target main --title "Silicon Empire $V (Beta)" --notes-file notes.md --latest
+
+      - name: Upload-Branch löschen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/${GITHUB_REF_NAME}"
