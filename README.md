@@ -1,6 +1,6 @@
 # Silicon Dynasty
 
-Technologie-Tycoon-Spiel von Schnurrlify. Gründe eine Elektronikfirma, entwirf Geräte, bau Fabriken und setz dich gegen die grossen Marken durch.
+Technologie-Tycoon-Spiel von Arkon. Gründe eine Elektronikfirma, entwirf Geräte, bau Fabriken und setz dich gegen die grossen Marken durch.
 
 **Webseite:** https://silicondynasty.ch
 
@@ -17,4 +17,4 @@ Zeigt Windows beim Start des Setups «Der Computer wurde durch Windows geschütz
 
 Über das [Kontaktformular](https://silicondynasty.ch/kontakt.html).
 
-In diesem Repo liegen nur die Installationsdateien. Der Quellcode ist nicht öffentlich. © Schnurrlify, alle Rechte vorbehalten.
+In diesem Repo liegen nur die Installationsdateien. Der Quellcode ist nicht öffentlich. © Arkon, alle Rechte vorbehalten.
